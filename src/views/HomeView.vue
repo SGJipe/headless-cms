@@ -1,18 +1,36 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    {{ courses }}
   </div>
 </template>
 
 <script>
+import { supabase } from '@/supabase'
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'HomeView',
-  components: {
-    HelloWorld
+  components: {},
+
+  data() {
+    return {
+      courses: [],
+    } 
+  },
+
+  mounted() {
+    this.getAllCourses();
+  },
+
+  methods: {
+    async getAllCourses() {
+      const {data, error} = await this.$supabase.from("courses").select();
+      if(data) {
+        this.courses = data;
+      } else {
+        console.log(error)
+      }
+    }
   }
 }
 </script>
